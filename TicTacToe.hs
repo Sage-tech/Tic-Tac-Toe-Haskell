@@ -61,6 +61,12 @@ getSpacePosition board = do
 -- ->  -> function with 2 args types that result in IO
 runTicTacToe :: [Space] -> Char -> IO
 runTicTacToe = undefined
+-- remove the Nth number (index being N-1) from a list
+removeNth :: Int -> [a] -> ([a], [a])
+removeNth index lst = (left, right)
+    where
+        (left, ys) = splitAt (index - 1) lst
+        right = drop 1 ys
 
 
 -- To make a type a member of type class the instance keyword is used
