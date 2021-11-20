@@ -119,8 +119,9 @@ checkVerticalWin board player pos = topPos == player && middlePos == player && b
         topPos = board !! index
         middlePos = board !! (index + 3)
         bottomPos = board !! (index + 6)
-
-
+--Will return if player on vert
+playerWonVertically :: [Space] -> Space -> Bool
+playerWonVertically board player = or $ map (checkVerticalWin board player) [0, 1, 2]
 
 --input will be the space the player chooses and out puts a Char to return an IO action
 -- Checks to see if there is a winner or a tie and if not continue
