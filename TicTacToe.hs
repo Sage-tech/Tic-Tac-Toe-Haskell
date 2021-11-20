@@ -1,3 +1,4 @@
+import Data.List
 -- An Open space has an int of (1+index)
 --Player Space (X or O)
 -- Game input Char that is a number that is a single digit then output Char 
@@ -5,6 +6,12 @@
 [Space 1, Space 2, Space 3, 
  Space 4, Space 5, Space 6,
  Space 7, Space 8, Space 9]
+-}{-
+ 1 | 2 | 3
+ ---------
+ 4 | 5 | 6
+ ---------
+ 7 | 8 | 9
 -}
 
 
@@ -79,9 +86,22 @@ getSpacePosition board = do
     if input `elem` ['1' .. '9'] && openSpace board (read [input])
         then return $ (read [input])
         else getSpacePosition board
-
-
-               
+        -- creates 3 items in a single line in a board list
+showBoardLine :: [Space] -> String
+--(:) join one elem to a list 
+showBoardLine (a:b:c:xs) = (show a) ++ " | " ++ (show b) ++ " | "++ (show c)
+showBoardLine _ = error "List must have at least three elements"
+--Border to sperate lines
+-- Given Board, turns that board into a string to print
+boardBorder :: String
+boardBorder = "\n---------\n"
+       
+showBoard :: [Space] -> String
+showBoard board = concat $ intersperse boardBorder $ [top, middle, bottom] 
+    where
+        top = showBoardLine board
+        middle = showBoardLine (drop 3 board)
+        bottom = showBoardLine (drop 6 board)
 -- :: means to tell the complier this expression should be type . . .  type signature
 -- ->  -> function with 2 args types that result in IO
 runTicTacToe :: [Space] -> Char -> IO ()
