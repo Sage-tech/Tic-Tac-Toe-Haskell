@@ -109,6 +109,19 @@ tooglePlayers 'X' = 'O'
 tooglePlayers 'O' = 'X'
 --An error if player chooses anything other than X or O
 tooglePlayers _ = error "tooglePlayers will only take the Characters X or O"
+-- Rules on how to win Tic Tac Toe or what is considered a tie
+-- Current state of the board, player space and the position of player 1 and player 2 
+--see if player 1 or 2 won verticaly starting from a given position 
+checkVerticalWin :: [Space] -> Space -> Int -> Bool
+checkVerticalWin board player pos = topPos == player && middlePos == player && bottomPos == player
+    where
+        index = pos - 1
+        topPos = board !! index
+        middlePos = board !! (index + 3)
+        bottomPos = board !! (index + 6)
+
+
+
 --input will be the space the player chooses and out puts a Char to return an IO action
 -- Checks to see if there is a winner or a tie and if not continue
 checkBoardState :: [Space] -> Char -> IO()        
