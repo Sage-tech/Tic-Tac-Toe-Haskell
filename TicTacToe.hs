@@ -102,11 +102,30 @@ showBoard board = concat $ intersperse boardBorder $ [top, middle, bottom]
         top = showBoardLine board
         middle = showBoardLine (drop 3 board)
         bottom = showBoardLine (drop 6 board)
+
+--Current State of player Char (Space), give the other Player Char (Space)
+tooglePlayers :: Char -> Char
+tooglePlayers 'X' = 'O'
+tooglePlayers 'O' = 'X'
+--An error if player chooses anything other than X or O
+tooglePlayers _ = error "tooglePlayers will only take the Characters X or O"
+--input will be the space the player chooses and out puts a Char to return an IO action
+-- Checks to see if there is a winner or a tie and if not continue
+checkBoardState :: [Space] -> Char -> IO()        
+checkBoardState board playerChr = undefined
+
+-- Main function loop that will run tic tac toe to the terminal
 -- :: means to tell the complier this expression should be type . . .  type signature
 -- ->  -> function with 2 args types that result in IO
 runTicTacToe :: [Space] -> Char -> IO ()
-runTicTacToe board playerChr = undefined
+runTicTacToe board playerChr = do 
+    putStrLn $ showBoard board
+    rawChoice <- getSpacePosition board
+    --Generate a new board after Player chooses a space 
+    let newBoard = placeSpace board (Player playerChr) rawChoice
+    putStrLn $ showBoard newBoard
 -- When a Haskell program is executed, `main` is
 -- called. It must return a value of type `IO a` for some type
 main :: IO ()
-main = undefined
+main = runTicTacToe board 'X'
+    where board = [Open 1, Open 2,  Open 3, Open 4, Open 5, Open 6, Open 7, Open 8, Open 9]
