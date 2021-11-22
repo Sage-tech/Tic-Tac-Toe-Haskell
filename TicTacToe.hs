@@ -145,7 +145,10 @@ checkDiagonalWin board player pos step = firstPos == player && secondPos == play
         thirdPos = board !! (index + 2 * step)
 -- given board, player return true if player won diagonally
 playerWonDiagonal :: [Space] -> Space -> Bool
-playerWonDiagonal board player = firstPos == player && secondPos == player && thirdPos == player
+playerWonDiagonal board player = wonFirstDiagonal || wonSecondDiagonal
+    where
+        wonFirstDiagonal = checkDiagonalWin board player 0 4 
+        wonSecondDiagonal = checkDiagonalWin board player 2 2
 
 
 --input will be the space the player chooses and out puts a Char to return an IO action
