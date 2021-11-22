@@ -36,6 +36,8 @@ data Space
 
 -- Define show for Spaces so it displays components
 -- ex) Terminal show $ Open 1 
+-- To make a type a member of type class the instance keyword is used
+--Instance shows how the behavior implements using the given data
 instance Show Space where
     show (Open q) = show q
     show (Player f) = [f]
@@ -46,14 +48,15 @@ instance Show Space where
 -- Also check to see if Player X or O won to end the game
 -- Input from Player needs to be an Char and nothing else 
 
--- remove the Nth number (index being N-1) from a list
+-- removes the Nth item (index being N-1) from a list
 removeNth :: Int -> [a] -> ([a], [a])
 removeNth index lst = (left, right)
     where
+--split 2 list remove 1 element from 1 list then join them back together
         (left, ys) = splitAt (index - 1) lst
+        --drop is deleting 1 from the right side of the list
         right = drop 1 ys
--- Given board, space, and index to place a space in , place space
---at the position N (index being N - 1)
+-- Given board, space, and index to place a space in , place space at the position N (index being N - 1)
 --This is to place X, O on the board
 placeSpace :: [a] -> a -> Int -> [a]
 placeSpace board space index = xs ++ [space] ++ ys
@@ -71,8 +74,7 @@ openSpace board index
     | spaceIsOpen $ board !! i = True
     | otherwise              = False
     where i = index - 1 
--- To make a type a member of type class the instance keyword is used
---Instance shows how the behavior implements using the given data
+
  --getSpacePosition is a list of Spaces 
     --making sure the spaces are valid spaces that the player can choose
 getSpacePosition :: [Space] -> IO Int
