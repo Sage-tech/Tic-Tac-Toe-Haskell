@@ -100,6 +100,7 @@ boardBorder :: String
 boardBorder = "\n---------\n"
        
 showBoard :: [Space] -> String
+--intersperse inserts separator between the elements of its list argument
 showBoard board = concat $ intersperse boardBorder $ [top, middle, bottom] 
     where
         top = showBoardLine board
