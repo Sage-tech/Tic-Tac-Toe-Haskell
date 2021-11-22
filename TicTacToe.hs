@@ -119,9 +119,29 @@ checkVerticalWin board player pos = topPos == player && middlePos == player && b
         topPos = board !! index
         middlePos = board !! (index + 3)
         bottomPos = board !! (index + 6)
---Will return if player on vert
+--Will return if player won vert
 playerWonVertically :: [Space] -> Space -> Bool
 playerWonVertically board player = or $ map (checkVerticalWin board player) [0, 1, 2]
+
+-- given a board, player and position, check if the player won Horizontal
+checkHorizontalWin :: [Space] -> Space -> Int -> Bool
+checkHorizontalWin board player pos = firstPos == player && secondPos == player && thirdPos == player
+    where
+        index = pos - 1
+        firstPos = board !! index
+        secondPos = board !! (index + 1)
+        thirdPos = board !! (index + 2)
+-- Will return if player won Horiz
+playerWonHorizontal :: [Space] -> Space -> Bool
+playerWonHorizontal board player = or $ map (checkHorizontalWin board player) [0, 3, 6 ]
+-- We have to think about the starting position and also a step the last part is the amount we increment by
+checkDiagonalWin :: [Space] -> Space -> Int -> Int -> Bool
+checkDiagonalWin board player pos step = firstPos == player && secondPos == player && thirdPos == player
+    where
+        index = pos - 1
+        firstPos = board !! index
+        secondPos = board !! (index + step)
+        thirdPos = board !! (index + 2 * step)
 
 --input will be the space the player chooses and out puts a Char to return an IO action
 -- Checks to see if there is a winner or a tie and if not continue
