@@ -77,7 +77,7 @@ openSpace board index
     --making sure the spaces are valid spaces that the player can choose
 getSpacePosition :: [Space] -> IO Int
 getSpacePosition board = do
-    putStrLn "Enter an open position (1 - 9):"
+    
         -- do notation chains actions together
         -- left arrow converts and IO action to a regular value ... so what is right store it to the left
     input <- getChar 
@@ -86,6 +86,7 @@ getSpacePosition board = do
     if input `elem` ['1' .. '9'] && openSpace board (read [input])
         then return $ (read [input])
         else getSpacePosition board
+        
         -- creates 3 items in a single line in a board list
 showBoardLine :: [Space] -> String
 --(:) join one elem to a list 
@@ -94,6 +95,7 @@ showBoardLine _ = error "List must have at least three elements"
 --Border to sperate lines
 -- Given Board, turns that board into a string to print
 boardBorder :: String
+--"\n is to write a new line"
 boardBorder = "\n---------\n"
        
 showBoard :: [Space] -> String
@@ -168,6 +170,7 @@ checkBoardState board playerChr
 -- ->  -> function with 2 args types that result in IO
 runTicTacToe :: [Space] -> Char -> IO ()
 runTicTacToe board playerChr = do 
+    putStrLn "Enter an open position (1 - 9):"
     putStrLn $ showBoard board
     rawChoice <- getSpacePosition board
     --Generate a new board after Player chooses a space 
@@ -179,3 +182,4 @@ runTicTacToe board playerChr = do
 main :: IO ()
 main = runTicTacToe board 'X'
     where board = [Open 1, Open 2,  Open 3, Open 4, Open 5, Open 6, Open 7, Open 8, Open 9]
+    
