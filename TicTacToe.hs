@@ -134,6 +134,7 @@ checkHorizontalWin board player pos = firstPos == player && secondPos == player 
 -- Will return if player won Horiz
 playerWonHorizontal :: [Space] -> Space -> Bool
 playerWonHorizontal board player = or $ map (checkHorizontalWin board player) [0, 3, 6 ]
+-- given board, player, starting pos and step return true if the next 3 spaces are the players pos on the board
 -- We have to think about the starting position and also a step the last part is the amount we increment by
 checkDiagonalWin :: [Space] -> Space -> Int -> Int -> Bool
 checkDiagonalWin board player pos step = firstPos == player && secondPos == player && thirdPos == player
@@ -142,6 +143,10 @@ checkDiagonalWin board player pos step = firstPos == player && secondPos == play
         firstPos = board !! index
         secondPos = board !! (index + step)
         thirdPos = board !! (index + 2 * step)
+-- given board, player return true if player won diagonally
+playerWonDiagonal :: [Space] -> Space -> Bool
+playerWonDiagonal board player = firstPos == player && secondPos == player && thirdPos == player
+
 
 --input will be the space the player chooses and out puts a Char to return an IO action
 -- Checks to see if there is a winner or a tie and if not continue
