@@ -104,18 +104,17 @@ showBoard board = concat $ intersperse boardBorder $ [top, middle, bottom]
         bottom = showBoardLine (drop 6 board)
 
 --Current State of player Char (Space), give the other Player Char (Space)
-tooglePlayers :: Char -> Char
-tooglePlayers 'X' = 'O'
-tooglePlayers 'O' = 'X'
+togglePlayers :: Char -> Char
+togglePlayers 'X' = 'O'
+togglePlayers 'O' = 'X'
 --An error if player chooses anything other than X or O
-tooglePlayers _ = error "tooglePlayers will only take the Characters X or O"
+togglePlayers _ = error "togglePlayers will only take the Characters X or O"
 -- Rules on how to win Tic Tac Toe or what is considered a tie
 -- Current state of the board, player space and the position of player 1 and player 2 
 --see if player 1 or 2 won verticaly starting from a given position 
 checkVerticalWin :: [Space] -> Space -> Int -> Bool
-checkVerticalWin board player pos = topPos == player && middlePos == player && bottomPos == player
+checkVerticalWin board player index = topPos == player && middlePos == player && bottomPos == player
     where
-        index = pos - 1
         topPos = board !! index
         middlePos = board !! (index + 3)
         bottomPos = board !! (index + 6)
@@ -125,9 +124,8 @@ playerWonVertically board player = or $ map (checkVerticalWin board player) [0, 
 
 -- given a board, player and position, check if the player won Horizontal
 checkHorizontalWin :: [Space] -> Space -> Int -> Bool
-checkHorizontalWin board player pos = firstPos == player && secondPos == player && thirdPos == player
+checkHorizontalWin board player index = firstPos == player && secondPos == player && thirdPos == player
     where
-        index = pos - 1
         firstPos = board !! index
         secondPos = board !! (index + 1)
         thirdPos = board !! (index + 2)
@@ -137,9 +135,8 @@ playerWonHorizontal board player = or $ map (checkHorizontalWin board player) [0
 -- given board, player, starting pos and step return true if the next 3 spaces are the players pos on the board
 -- We have to think about the starting position and also a step the last part is the amount we increment by
 checkDiagonalWin :: [Space] -> Space -> Int -> Int -> Bool
-checkDiagonalWin board player pos step = firstPos == player && secondPos == player && thirdPos == player
+checkDiagonalWin board player index step = firstPos == player && secondPos == player && thirdPos == player
     where
-        index = pos - 1
         firstPos = board !! index
         secondPos = board !! (index + step)
         thirdPos = board !! (index + 2 * step)
@@ -149,12 +146,22 @@ playerWonDiagonal board player = wonFirstDiagonal || wonSecondDiagonal
     where
         wonFirstDiagonal = checkDiagonalWin board player 0 4 
         wonSecondDiagonal = checkDiagonalWin board player 2 2
-
+-- Given board and player, return if player won in any scenario
+playerWon :: [Space] -> Space -> Bool
+playerWon board player = playerWonDiagonal board player || playerWonHorizontal board player || playerWonVertically board player
+-- Return if the game tied
+gameTied :: [Space] -> Bool
+gameTied board = all (\space -> not(spaceIsOpen space)) board
 
 --input will be the space the player chooses and out puts a Char to return an IO action
 -- Checks to see if there is a winner or a tie and if not continue
+    --asking question of the condition of the board
 checkBoardState :: [Space] -> Char -> IO()        
-checkBoardState board playerChr = undefined
+checkBoardState board playerChr
+    | gameTied board               = putStrLn "It is a tied game!"
+    | playerWon board (Player 'X') = putStrLn "Player X won the game!"
+    | playerWon board (Player 'O') = putStrLn "Player O won the game!"
+    | otherwise                    = runTicTacToe board (togglePlayers playerChr)
 
 -- Main function loop that will run tic tac toe to the terminal
 -- :: means to tell the complier this expression should be type . . .  type signature
@@ -165,7 +172,8 @@ runTicTacToe board playerChr = do
     rawChoice <- getSpacePosition board
     --Generate a new board after Player chooses a space 
     let newBoard = placeSpace board (Player playerChr) rawChoice
-    putStrLn $ showBoard newBoard
+    -- check did anyone win if not loop again
+    checkBoardState newBoard playerChr
 -- When a Haskell program is executed, `main` is
 -- called. It must return a value of type `IO a` for some type
 main :: IO ()
