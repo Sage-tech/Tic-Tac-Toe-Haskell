@@ -83,6 +83,7 @@ getSpacePosition board = do
     input <- getChar 
         --if input is a single digit, return int if not input again
             --is this space taken up already
+            --`elem` returns true if a list contains an item equal to the first arg
     if input `elem` ['1' .. '9'] && openSpace board (read [input])
         then return $ (read [input])
         else getSpacePosition board
@@ -153,6 +154,7 @@ playerWon :: [Space] -> Space -> Bool
 playerWon board player = playerWonDiagonal board player || playerWonHorizontal board player || playerWonVertically board player
 -- Return if the game tied
 gameTied :: [Space] -> Bool
+-- \ is a lambda
 gameTied board = all (\space -> not(spaceIsOpen space)) board
 
 --input will be the space the player chooses and out puts a Char to return an IO action
