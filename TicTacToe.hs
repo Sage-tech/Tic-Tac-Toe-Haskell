@@ -61,8 +61,8 @@ removeNth index lst = (left, right)
 placeSpace :: [a] -> a -> Int -> [a]
 placeSpace board space index = xs ++ [space] ++ ys
         where (xs, ys) = removeNth index board 
-        --xs is the rest of the list on the left
-        --ys is the rest of the list on the right
+        --xs is the rest of the list on the left (Head)
+        --ys is the rest of the list on the right (Tail)
         --Returns true if Space choosen is an open space
 spaceIsOpen :: Space -> Bool
 spaceIsOpen (Open _) = True
@@ -188,3 +188,17 @@ main :: IO ()
 main = runTicTacToe board 'X'
     where board = [Open 1, Open 2,  Open 3, Open 4, Open 5, Open 6, Open 7, Open 8, Open 9]
     
+
+    {-
+
+-- Haskell has an operator called `$`. This operator applies a function
+-- to a given parameter. In contrast to standard function application, which
+-- has highest possible priority of 10 and is left-associative, the `$` operator
+-- has priority of 0 and is right-associative. Such a low priority means that
+-- the expression on its right is applied as a parameter to the function on its left. 
+    
+
+
+Lists can be indexed with the `!!` operator followed by an index
+    
+    -}
