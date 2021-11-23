@@ -39,15 +39,15 @@ data Space
 -- To make a type a member of type class the instance keyword is used
 --Instance shows how the behavior implements using the given data
 instance Show Space where
-    show (Open q) = show q
-    show (Player f) = [f]
+    show (Open n) = show n
+    show (Player c) = [c]
 -- Once I have my components made I need to think about the board and what will load to the terminal 
 -- Also the board needs to know what is a Player
 -- I need to create a function for the Board that take inputs but only if a space is available
 -- Need to generate a new board to the terminal 
 -- Also check to see if Player X or O won to end the game
 -- Input from Player needs to be an Char and nothing else 
-
+-------------------------------------------------------------------------------------------------
 -- removes the Nth item (index being N-1) from a list
 removeNth :: Int -> [a] -> ([a], [a])
 removeNth index lst = (left, right)
@@ -63,10 +63,7 @@ placeSpace board space index = xs ++ [space] ++ ys
         where (xs, ys) = removeNth index board 
         --xs is the rest of the list on the left (Head)
         --ys is the rest of the list on the right (Tail)
-        --Returns true if Space choosen is an open space
-spaceIsOpen :: Space -> Bool
-spaceIsOpen (Open _) = True
-spaceIsOpen _       = False
+
 -- Return true if the index on the board is open (index is N -1)
 openSpace :: [Space] -> Int -> Bool
 openSpace board index
@@ -75,21 +72,29 @@ openSpace board index
     | otherwise              = False
     where i = index - 1 
 
+ --Returns true if Space chosen by Player is an open space
+spaceIsOpen :: Space -> Bool
+spaceIsOpen (Open _) = True
+spaceIsOpen _       = False
+
  --getSpacePosition is a list of Spaces 
     --making sure the spaces are valid spaces that the player can choose
+
 getSpacePosition :: [Space] -> IO Int
 getSpacePosition board = do
-    
         -- do notation chains actions together
         -- left arrow converts and IO action to a regular value ... so what is right store it to the left
     input <- getChar 
         --if input is a single digit, return int if not input again
             --is this space taken up already
             --`elem` returns true if a list contains an item equal to the first arg
+                -- Read for types that can be created from a string representation
     if input `elem` ['1' .. '9'] && openSpace board (read [input])
         then return $ (read [input])
         else getSpacePosition board
         
+
+-------------------------------------------------------------------------------------------
         -- creates 3 items in a single line in a board list
 showBoardLine :: [Space] -> String
 --(:) join one elem to a list 
@@ -108,13 +113,14 @@ showBoard board = concat $ intersperse boardBorder $ [top, middle, bottom]
         top = showBoardLine board
         middle = showBoardLine (drop 3 board)
         bottom = showBoardLine (drop 6 board)
-
+---------------------------------------------------------------------------------------------------
 --Current State of player Char (Space), give the other Player Char (Space)
 togglePlayers :: Char -> Char
 togglePlayers 'X' = 'O'
 togglePlayers 'O' = 'X'
 --An error if player chooses anything other than X or O
 togglePlayers _ = error "togglePlayers will only take the Characters X or O"
+----------------------------------------------------------------------------------------------------
 -- Rules on how to win Tic Tac Toe or what is considered a tie
 -- Current state of the board, player space and the position of player 1 and player 2 
 --see if player 1 or 2 won verticaly starting from a given position 
